@@ -1,0 +1,11 @@
+.newMessageTextBoxContainer {
+    position: absolute;
+    bottom: 15px;
+}
+
+.sendIcon {
+    margin-left: 10px;
+    color:rgb(37, 12, 182);
+    display: flex;
+    align-items: center;
+}

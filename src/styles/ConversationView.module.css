@@ -1,0 +1,30 @@
+.friendSent {
+  background-color: #7d2792;
+  border-radius: 10px;
+  box-sizing: border-box;
+  clear: both;
+  color: white;
+  float: left;
+  margin: 5px;
+  padding: 20px;
+  width: 300px;
+  word-wrap: break-word;
+}
+
+.userSent {
+  background-color: #273b92;
+  border-radius: 10px;
+  box-sizing: border-box;
+  clear: both;
+  color: white;
+  float: right;
+  margin: 5px;
+  padding: 20px;
+  width: 300px;
+  word-wrap: break-word;
+}
+
+.noMessageContainer {
+  margin: auto;
+  text-align: center;
+}

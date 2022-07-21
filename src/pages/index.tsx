@@ -1,66 +1,88 @@
-import type { FC } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
+import { Alert, Grid, Snackbar } from '@mui/material'
+import { isNotNilOrEmpty } from 'ramda-adjunct'
+import axios from 'axios'
+
+import ConversationView from '../components/conversationView'
+import ConversationsList from '../components/conversationsList'
+import NewConversation from '../components/newConversation'
+import NewMessageTextBox from '../components/newMessageTextBox'
+import { loggedUserId } from './_app'
 import Head from 'next/head'
-import Image from 'next/image'
-import Logo from '../assets/lbc-logo.webp'
-import styles from '../styles/Home.module.css'
 
 const Home: FC = () => {
-  const year = new Date().getFullYear()
+  const [conversations, setConversations] = useState([])
+  const [messages, setMessages] = useState([])
+  const [newMessage, setNewMessage] = useState("");
+  const [openNewConversationDialog, setOpenNewConversationDialog] = useState(false);
+  const [openSnackbarError, setOpenSnackbarError] = useState(false);
+  const [selectedConversation, setSelectedConversation] = useState(0)
+
+  const handleCreateNewConversation = () => {
+    setOpenNewConversationDialog(true);
+    setSelectedConversation(null);
+  }
+
+  const getMessages = useCallback(() => {
+    axios.get(`http://localhost:3005/messages/${selectedConversation+1}`).then(function ({data}) {
+      setMessages(data)    
+    })
+    .catch(function () {
+      setOpenSnackbarError(true)   
+    });
+  }, [selectedConversation])
+
+      
+  const getConversations = useCallback(() => {
+    axios.get(`http://localhost:3005/conversations/${loggedUserId}`).then(function ({data}) {
+    if(isNotNilOrEmpty(data)) {
+        setConversations(data);
+        getMessages()
+      }  
+    })
+    .catch(function () {
+      setOpenSnackbarError(true)   
+    });
+  }, [getMessages])
+
+  const submitMessage = (messageToSend) => {
+    axios.post(`http://localhost:3005/messages/${selectedConversation+1}`, {authorId: loggedUserId, conversationId: selectedConversation+1, body: messageToSend,timeStamp: new Date().getTime()}).then(function () {
+      setNewMessage('')
+      getMessages()   
+    }).catch(function () {
+      setOpenSnackbarError(true)   
+    })
+  }
+
+  useEffect(() => {
+    getConversations()
+  }, [getConversations])
+
 
   return (
-    <div className={styles.container}>
+    <Grid container>
       <Head>
         <title>Frontend Technical test - Leboncoin</title>
         <meta name="description" content="Frontend exercise for developpers who want to join us on leboncoin.fr"></meta>
       </Head>
+      <Grid item md={4} xs={12}>
+        <ConversationsList handleCreateNewConversation={handleCreateNewConversation} conversations={conversations} getMessages={getMessages} selectedConversation={selectedConversation} setSelectedConversation={setSelectedConversation}/>
+      </Grid>
+      <Grid item md={8} xs={12}>
 
-      <main className={styles.main}>
-        <Image src={Logo} alt="Leboncoin Frontend Team" width={400} height={125} layout="fixed" />
-        <h1 className={styles.title}>
-          Welcome !
-        </h1>
-
-        <p className={styles.description}>
-          This test is based on a <a title="Next.js documentation" href="https://nextjs.org/docs/getting-started" target="_blank" rel="noopener noreferrer">Next.js</a> application.<br />
-          Fork the repository and use the <code className={styles.code}>main</code> branch as your starting point.
-          <br /><br />
-
-          Get started by reading{' '}
-          <code className={styles.code}>README.md</code> and editing <code className={styles.code}>src/pages/index.js</code>
-          <br />
-          Once you are done, send the repository link to your HR contact.
-        </p>
-
-        <div className={styles.grid}>
-          <article className={styles.card}>
-            <h2>Design</h2>
-            <p>Feel free to create any design you want for this exercise. Let your creativity talks !</p>
-          </article>
-
-          <article className={styles.card}>
-            <h2>Libraries</h2>
-            <p>Feel free to use any library you want. Only Next.js / React are required.</p>
-          </article>
-
-          <article className={styles.card}>
-            <h2>API Server</h2>
-            <p>
-              Start the API server on port <code className={styles.code}>3005</code> by running<br /><code className={styles.code}>npm run start-server</code>.<br/>
-              Find the swagger definitions in <code className={styles.code}>docs/api-swagger.yml</code> or <a title="API Swagger documentation" href="https://leboncoin.tech/frontend-technical-test/" target="_blank" rel="noopener noreferrer">the online documentation</a>.
-            </p>
-          </article>
-
-          <article className={styles.card}>
-            <h2>Timing</h2>
-            <p>We recommend 4 hours for this test. You are free to spend more (or less) time, let us know how much time did you spend.</p>
-          </article>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        &copy; leboncoin - {year}
-      </footer>
-    </div>
+        {
+          openNewConversationDialog 
+            ? <NewConversation getConversations={getConversations} setOpenSnackbarError={setOpenSnackbarError} submitMessage={submitMessage} openNewConversationDialog={openNewConversationDialog} setSelectedConversation={setSelectedConversation}  setOpenNewConversationDialog={setOpenNewConversationDialog} />
+            : <ConversationView messages={messages}/>
+        }
+        <NewMessageTextBox newMessage={newMessage} setNewMessage={setNewMessage} submitMessage={submitMessage} />
+      </Grid>
+      <Snackbar open={openSnackbarError} autoHideDuration={3000} onClose={() => setOpenSnackbarError(false)}>
+        <Alert onClose={() => setOpenSnackbarError(false)} severity="error" sx={{ width: '100%' }}>
+          Une erreur est survenue. Veuillez réessayer dans quelques instants
+        </Alert>
+      </Snackbar>
+    </Grid>
   )
 }
 

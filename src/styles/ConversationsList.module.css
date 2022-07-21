@@ -1,0 +1,12 @@
+.newConversationButton {
+ margin: 10px;
+ width: 70%;
+}
+
+
+@media (max-width: 600px) {
+    .listContainer {
+        max-height: 20%;
+        overflow: auto; 
+    }
+}

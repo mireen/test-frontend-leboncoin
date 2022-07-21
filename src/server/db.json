@@ -23,6 +23,30 @@
       "senderId": 4,
       "senderNickname": "Elodie",
       "lastMessageTimestamp": 1625648667
+    },
+    {
+      "id": 4,
+      "recipientId": 4,
+      "recipientNickname": "Elodie",
+      "senderId": 1,
+      "senderNickname": "Thibaut",
+      "lastMessageTimestamp": 1620284667
+    },
+    {
+      "recipientId": 2,
+      "recipientNickname": "Jeremie",
+      "senderId": 6,
+      "senderNickname": "Alice",
+      "lastMessageTimestamp": 1657789795800,
+      "id": 5
+    },
+    {
+      "recipientId": 6,
+      "recipientNickname": "Alice",
+      "senderId": 1,
+      "senderNickname": "Thibaut",
+      "lastMessageTimestamp": 1657887892179,
+      "id": 6
     }
   ],
   "messages": [
@@ -53,6 +77,48 @@
       "timestamp": 1620284667,
       "authorId": 2,
       "body": "Bonjour c'est le premier message de la seconde conversation"
+    },
+    {
+      "authorId": 1,
+      "conversationId": 2,
+      "body": "Bonjour !",
+      "timeStamp": 1657568134204,
+      "id": 5
+    },
+    {
+      "authorId": 1,
+      "conversationId": 2,
+      "body": "Comment ça va ?",
+      "timeStamp": 1657715124681,
+      "id": 7
+    },
+    {
+      "authorId": 1,
+      "conversationId": 4,
+      "body": "Bonjour",
+      "timeStamp": 1657789786026,
+      "id": 8
+    },
+    {
+      "authorId": 1,
+      "conversationId": 4,
+      "body": "Bonjour",
+      "timeStamp": 1657789796139,
+      "id": 9
+    },
+    {
+      "authorId": 1,
+      "conversationId": 1,
+      "body": "Bonjour :)",
+      "timeStamp": 1657887871528,
+      "id": 10
+    },
+    {
+      "authorId": 1,
+      "conversationId": 1,
+      "body": "Coucou Alice !",
+      "timeStamp": 1657887892519,
+      "id": 11
     }
   ],
   "users": [
@@ -74,6 +140,21 @@
     {
       "id": 4,
       "nickname": "Elodie",
+      "token": "xxxx"
+    },
+    {
+      "id": 5,
+      "nickname": "Clément",
+      "token": "xxxx"
+    },
+    {
+      "id": 6,
+      "nickname": "Alice",
+      "token": "xxxx"
+    },
+    {
+      "id": 7,
+      "nickname": "Aude",
       "token": "xxxx"
     }
   ]
